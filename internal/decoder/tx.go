@@ -1,22 +1,20 @@
 package decoder
 
-type Transaction struct{
-	Version int64
-	Inputs []TxInput
-	Outputs []TxOutput
-	LockTime uint32
+type Transaction struct {
+	Version  int64      `json:"version"`
+	Inputs   []TxInput  `json:"input"`
+	Outputs  []TxOutput `json:"output"`
+	LockTime uint32     `json:"locktime"`
 }
 
-type TxInput struct{
-	PrevTxId []byte
-	PrevIndex uint32
-	ScriptSign []byte
-	Sequence uint32
-
+type TxInput struct {
+	PrevTxId   []byte `json:"prevtxid"`
+	PrevIndex  uint32 `json:"previndex"`
+	ScriptSign []byte `json:"scriptsign"`
+	Sequence   uint32 `json:"sequence"`
 }
 
-type TxOutput struct{
-	Value uint64
-	PubKey []byte
-
+type TxOutput struct {
+	Value  uint64 `json:"value"`
+	PubKey []byte `json:"pubkey"`
 }
