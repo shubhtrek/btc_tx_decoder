@@ -1,13 +1,22 @@
 package decoder
 
-import "fmt"
-
 func Decoder(raw []byte) (*Transaction, error) {
-	if len(raw) == 0 {
-		return nil, fmt.Errorf("Empty Tx")
+	r := NewReader(raw)
+
+	version, err := r.ReadUint32()
+	if err != nil {
+		return nil, err
 	}
 
-	tx := &Transaction{}
+	inputCount, err := r.ReadVarInt()
+	if err != nil {
+		return nil, err
+	}
 
-	return tx ,nil
+	tx := &Transaction{
+		Version: version,
+		Inputs:  make([]TxInput, inputCount),
+	}
+
+	return tx, nil
 }

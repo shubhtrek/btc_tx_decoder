@@ -10,7 +10,10 @@ func main() {
 
 	fmt.Println("Bitcoin Transaction Decoder")
 
-	raw := []byte{}
+	raw := []byte{
+			0x01, 0x00, 0x00, 0x00, // version = 1
+	0x01, // input count = 1
+	}
 	_, err := decoder.Decoder(raw)
 	if err != nil {
 		fmt.Println("Error:", err)

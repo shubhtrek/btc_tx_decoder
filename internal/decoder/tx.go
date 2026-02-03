@@ -1,7 +1,7 @@
 package decoder
 
 type Transaction struct {
-	Version  int64      `json:"version"`
+	Version  uint32      `json:"version"`
 	Inputs   []TxInput  `json:"input"`
 	Outputs  []TxOutput `json:"output"`
 	LockTime uint32     `json:"locktime"`
