@@ -8,9 +8,9 @@ type Transaction struct {
 }
 
 type TxInput struct {
-	PrevTxId   []byte `json:"prevtxid"`
+	PrevTxID   []byte `json:"prevtxid"`
 	PrevIndex  uint32 `json:"previndex"`
-	ScriptSign []byte `json:"scriptsign"`
+	ScriptSig []byte `json:"scriptsign"`
 	Sequence   uint32 `json:"sequence"`
 }
 

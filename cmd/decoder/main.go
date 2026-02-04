@@ -14,7 +14,7 @@ func main() {
 			0x01, 0x00, 0x00, 0x00, // version = 1
 	0x01, // input count = 1
 	}
-	_, err := decoder.Decoder(raw)
+	_, err := decoder.Decode(raw)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
