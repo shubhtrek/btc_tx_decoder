@@ -65,3 +65,12 @@ func (r *Reader) ReadVarInt() (uint64, error){
 		
 	
 }
+
+func (r *Reader) ReadUint64()(uint64, error){
+	b,err := r.read(8)
+	if err != nil {
+		return 0, err
+	}
+	return binary.LittleEndian.Uint64(b),nil
+	
+}
