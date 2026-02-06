@@ -1,5 +1,7 @@
 package decoder
 
+import "fmt"
+
 func Decode(raw []byte) (*Transaction, error) {
 	r := NewReader(raw)
 
@@ -84,10 +86,35 @@ func Decode(raw []byte) (*Transaction, error) {
 		tx.Outputs = append(tx.Outputs, output)
 	}
 
-	lockTime,err := r.ReadUint32()
+	lockTime, err := r.ReadUint32()
 	if err != nil {
 		return nil, err
 	}
 	tx.LockTime = lockTime
 	return tx, nil
+}
+
+func PrettyPrint(tx *Transaction) {
+	fmt.Println("----- Bitcoin Transaction -----")
+	fmt.Println("Version:", tx.Version)
+	fmt.Println("Inputs:", len(tx.Inputs))
+	fmt.Println("Outputs:", len(tx.Outputs))
+	fmt.Println("LockTime:", tx.LockTime)
+	fmt.Println()
+
+	for i, in := range tx.Inputs {
+		fmt.Println("Input", i)
+		fmt.Println("  PrevTxID:", fmt.Sprintf("%x", in.PrevTxID))
+		fmt.Println("  PrevIndex:", in.PrevIndex)
+		fmt.Println("  ScriptSig:", fmt.Sprintf("%x", in.ScriptSig))
+		fmt.Println("  Sequence:", in.Sequence)
+		fmt.Println()
+	}
+
+	for i, out := range tx.Outputs {
+		fmt.Println("Output", i)
+		fmt.Println("  Value (sats):", out.Value)
+		fmt.Println("  ScriptPubKey:", fmt.Sprintf("%x", out.ScriptPubkey))
+		fmt.Println()
+	}
 }
