@@ -1,6 +1,9 @@
 package decoder
 
-import "fmt"
+import (
+	"encoding/binary"
+	"fmt"
+)
 
 func Decode(raw []byte) (*Transaction, error) {
 	r := NewReader(raw)
@@ -63,10 +66,12 @@ func Decode(raw []byte) (*Transaction, error) {
 	}
 
 	for i := uint64(0); i < outputCount; i++ {
-		value, err := r.ReadUint64()
+		valueByte, err := r.read(8)
+
 		if err != nil {
 			return nil, err
 		}
+		value := binary.LittleEndian.Uint64(valueByte)
 
 		scriptLen, err := r.ReadVarInt()
 		if err != nil {
