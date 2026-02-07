@@ -1,38 +1,24 @@
 package main
 
 import (
+	"encoding/hex"
 	"fmt"
 
 	"github.com/shubhtrek/btc_tx_decoder/internal/decoder"
 )
 
-
 func main() {
 
 	fmt.Println("Bitcoin Transaction Decoder")
 
-	// raw transaction bytes (dummy for now)
-	raw := []byte{
-		// version
-	0x01, 0x00, 0x00, 0x00,
+	// raw transaction hex (sample bitcoin transaction)
 
-	// input count = 1
-	0x01,
+	hexTx := "0100000001e1c7a1d2f3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f001122334455667788990000000000ffffffff0100f2052a010000000000000000"
 
-	// PrevTxID (32 bytes fake)
-	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-
-	// PrevIndex (4 bytes)
-	0x00, 0x00, 0x00, 0x00,
-
-	// Script length = 0
-	0x00,
-
-	// Sequence (4 bytes)
-	0xff, 0xff, 0xff, 0xff,
+	raw, err := hex.DecodeString(hexTx)
+	if err != nil {
+		fmt.Println("Hex decode error:", err)
+		return
 	}
 
 	tx, err := decoder.Decode(raw)
@@ -40,10 +26,6 @@ func main() {
 		fmt.Println("Error:", err)
 		return
 	}
-
-	decoder.PrettyPrint(tx)
-
-	
 
 	decoder.PrettyPrint(tx)
 
