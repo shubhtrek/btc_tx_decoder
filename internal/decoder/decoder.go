@@ -125,3 +125,20 @@ func PrettyPrint(tx *Transaction) {
 		fmt.Println()
 	}
 }
+
+func PrintSummary(tx *Transaction) {
+	fmt.Println("----Tx Summary----")
+	fmt.Println("Version:", tx.Version)
+	fmt.Println("Inputs:", len(tx.Inputs))
+	fmt.Println("OutPuts:", len(tx.Outputs))
+	fmt.Println("LockTime:", tx.LockTime)
+
+	var total uint64 = 0
+	for _, out := range tx.Outputs {
+		total += out.Value
+	}
+
+	fmt.Println("Total Output (sats):", total)
+	fmt.Println("----------------")
+	fmt.Println()
+}

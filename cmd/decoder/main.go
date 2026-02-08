@@ -28,6 +28,8 @@ func main() {
 	}
 
 	decoder.PrettyPrint(tx)
+	decoder.PrintSummary(tx)
+
 
 	fmt.Println("Transaction Decoder Done")
 }
