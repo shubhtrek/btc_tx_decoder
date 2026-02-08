@@ -109,7 +109,7 @@ func PrettyPrint(tx *Transaction) {
 
 	for i, in := range tx.Inputs {
 		fmt.Println("Input", i)
-		fmt.Println("  PrevTxID:", fmt.Sprintf("%x", in.PrevTxID))
+		fmt.Println("  PrevTxID:", FormatTXID(in.PrevTxID))
 		fmt.Println("  PrevIndex:", in.PrevIndex)
 		fmt.Println("  ScriptSig:", fmt.Sprintf("%x", in.ScriptSig))
 		fmt.Println("  Sequence:", in.Sequence)
