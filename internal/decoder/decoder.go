@@ -111,7 +111,8 @@ func PrettyPrint(tx *Transaction) {
 		fmt.Println("Input", i)
 		fmt.Println("  PrevTxID:", FormatTXID(in.PrevTxID))
 		fmt.Println("  PrevIndex:", in.PrevIndex)
-		fmt.Println("  ScriptSig:", fmt.Sprintf("%x", in.ScriptSig))
+		fmt.Println("  ScriptSig (hex):", fmt.Sprintf("%x", in.ScriptSig))
+		fmt.Println("  ScriptSig (len):", len(in.ScriptSig), "bytes")
 		fmt.Println("  Sequence:", in.Sequence)
 		fmt.Println()
 	}
@@ -119,7 +120,8 @@ func PrettyPrint(tx *Transaction) {
 	for i, out := range tx.Outputs {
 		fmt.Println("Output", i)
 		fmt.Println("  Value (sats):", out.Value)
-		fmt.Println("  ScriptPubKey:", fmt.Sprintf("%x", out.ScriptPubkey))
+		fmt.Println("  ScriptPubKey (hex):", fmt.Sprintf("%x", out.ScriptPubkey))
+		fmt.Println("  ScriptPubKey (len):", len(out.ScriptPubkey), "bytes")
 		fmt.Println()
 	}
 }
