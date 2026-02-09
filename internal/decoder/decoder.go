@@ -125,6 +125,10 @@ func PrettyPrint(tx *Transaction) {
 		fmt.Println("  ScriptPubKey (hex):", fmt.Sprintf("%x", out.ScriptPubkey))
 		fmt.Println("  ScriptPubKey (len):", len(out.ScriptPubkey), "bytes")
 		fmt.Println("  ScriptPubKey Type:", DetectScriptType(out.ScriptPubkey))
+		hash := ExtractAddressHash(out.ScriptPubkey)
+		if hash != nil {
+			fmt.Println("  Address Hash:", fmt.Sprintf("%x", hash))
+		}
 
 		fmt.Println()
 	}
