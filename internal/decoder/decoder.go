@@ -128,6 +128,11 @@ func PrettyPrint(tx *Transaction) {
 		hash := ExtractAddressHash(out.ScriptPubkey)
 		if hash != nil {
 			fmt.Println("  Address Hash:", fmt.Sprintf("%x", hash))
+
+			if DetectScriptType(out.ScriptPubkey) == "P2PKH" {
+				addr := P2PKHAddress(hash)
+				fmt.Println("  Bitcoin Address:", addr)
+			}
 		}
 
 		fmt.Println()
