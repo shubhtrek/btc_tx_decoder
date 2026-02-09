@@ -113,6 +113,8 @@ func PrettyPrint(tx *Transaction) {
 		fmt.Println("  PrevIndex:", in.PrevIndex)
 		fmt.Println("  ScriptSig (hex):", fmt.Sprintf("%x", in.ScriptSig))
 		fmt.Println("  ScriptSig (len):", len(in.ScriptSig), "bytes")
+		fmt.Println("  ScriptSig Type:", DetectScriptType(in.ScriptSig))
+
 		fmt.Println("  Sequence:", in.Sequence)
 		fmt.Println()
 	}
@@ -122,6 +124,8 @@ func PrettyPrint(tx *Transaction) {
 		fmt.Println("  Value (sats):", out.Value)
 		fmt.Println("  ScriptPubKey (hex):", fmt.Sprintf("%x", out.ScriptPubkey))
 		fmt.Println("  ScriptPubKey (len):", len(out.ScriptPubkey), "bytes")
+		fmt.Println("  ScriptPubKey Type:", DetectScriptType(out.ScriptPubkey))
+
 		fmt.Println()
 	}
 }
