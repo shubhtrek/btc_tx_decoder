@@ -13,6 +13,7 @@ type TxInput struct {
 	PrevIndex uint32 `json:"previndex"`
 	ScriptSig []byte `json:"scriptsign"`
 	Sequence  uint32 `json:"sequence"`
+	Witness   [][]byte `json:"witness"`
 }
 
 type TxOutput struct {

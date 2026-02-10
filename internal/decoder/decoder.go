@@ -39,10 +39,10 @@ func Decode(raw []byte) (*Transaction, error) {
 	}
 
 	tx := &Transaction{
-		Version: version,
+		Version:  version,
 		IsSegWit: isSegWit,
-		Inputs:  make([]TxInput, 0),
-		Outputs: make([]TxOutput, 0),
+		Inputs:   make([]TxInput, 0),
+		Outputs:  make([]TxOutput, 0),
 	}
 
 	for i := uint64(0); i < inputCount; i++ {
@@ -112,6 +112,35 @@ func Decode(raw []byte) (*Transaction, error) {
 		tx.Outputs = append(tx.Outputs, output)
 	}
 
+	// ---- Witness data (SegWit only) ----
+	if tx.IsSegWit {
+		for i := 0; i < len(tx.Inputs); i++ {
+
+			witnessCount, err := r.ReadVarInt()
+			if err != nil {
+				return nil, err
+			}
+
+			var witnessStack [][]byte
+
+			for j := uint64(0); j < witnessCount; j++ {
+				itemLen, err := r.ReadVarInt()
+				if err != nil {
+					return nil, err
+				}
+
+				item, err := r.read(int(itemLen))
+				if err != nil {
+					return nil, err
+				}
+
+				witnessStack = append(witnessStack, item)
+			}
+
+			tx.Inputs[i].Witness = witnessStack
+		}
+	}
+
 	lockTime, err := r.ReadUint32()
 	if err != nil {
 		return nil, err
@@ -139,6 +168,14 @@ func PrettyPrint(tx *Transaction) {
 
 		fmt.Println("  Sequence:", in.Sequence)
 		fmt.Println()
+
+		if tx.IsSegWit && len(in.Witness) > 0 {
+			fmt.Println("  Witness:")
+			for wi, w := range in.Witness {
+				fmt.Println("   -", wi, ":", fmt.Sprintf("%x", w))
+			}
+		}
+
 	}
 
 	for i, out := range tx.Outputs {
