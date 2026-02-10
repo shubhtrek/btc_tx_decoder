@@ -13,6 +13,26 @@ func Decode(raw []byte) (*Transaction, error) {
 		return nil, err
 	}
 
+	// ---- SegWit detection ----
+	isSegWit := false
+
+	marker, err := r.read(1)
+	if err != nil {
+		return nil, err
+	}
+
+	flag, err := r.read(1)
+	if err != nil {
+		return nil, err
+	}
+
+	if marker[0] == 0x00 && flag[0] == 0x01 {
+		isSegWit = true
+	} else {
+		// not segwit → rewind reader position
+		r.pos -= 2
+	}
+
 	inputCount, err := r.ReadVarInt()
 	if err != nil {
 		return nil, err
@@ -20,6 +40,7 @@ func Decode(raw []byte) (*Transaction, error) {
 
 	tx := &Transaction{
 		Version: version,
+		IsSegWit: isSegWit,
 		Inputs:  make([]TxInput, 0),
 		Outputs: make([]TxOutput, 0),
 	}
@@ -102,6 +123,7 @@ func Decode(raw []byte) (*Transaction, error) {
 func PrettyPrint(tx *Transaction) {
 	fmt.Println("----- Bitcoin Transaction -----")
 	fmt.Println("Version:", tx.Version)
+	fmt.Println("SegWit:", tx.IsSegWit)
 	fmt.Println("Inputs:", len(tx.Inputs))
 	fmt.Println("Outputs:", len(tx.Outputs))
 	fmt.Println("LockTime:", tx.LockTime)

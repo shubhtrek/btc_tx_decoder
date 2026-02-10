@@ -2,6 +2,7 @@ package decoder
 
 type Transaction struct {
 	Version  uint32     `json:"version"`
+	IsSegWit bool       `json:"is_segwit"`
 	Inputs   []TxInput  `json:"input"`
 	Outputs  []TxOutput `json:"output"`
 	LockTime uint32     `json:"locktime"`
