@@ -146,13 +146,25 @@ func Decode(raw []byte) (*Transaction, error) {
 		return nil, err
 	}
 	tx.LockTime = lockTime
+
+	// ---- Hashes ----
+	tx.TXID = CalculateTXID(raw)
+	if tx.IsSegWit {
+		tx.WTXID = CalculateWTXID(raw)
+	} else {
+		tx.WTXID = tx.TXID
+	}
+
 	return tx, nil
+
 }
 
 func PrettyPrint(tx *Transaction) {
 	fmt.Println("----- Bitcoin Transaction -----")
 	fmt.Println("Version:", tx.Version)
 	fmt.Println("SegWit:", tx.IsSegWit)
+	fmt.Println("TXID:", tx.TXID)
+	fmt.Println("WTXID:", tx.WTXID)
 	fmt.Println("Inputs:", len(tx.Inputs))
 	fmt.Println("Outputs:", len(tx.Outputs))
 	fmt.Println("LockTime:", tx.LockTime)
