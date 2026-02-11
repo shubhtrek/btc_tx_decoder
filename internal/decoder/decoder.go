@@ -160,6 +160,7 @@ func Decode(raw []byte) (*Transaction, error) {
 }
 
 func PrettyPrint(tx *Transaction) {
+	fmt.Println("========== TX DECODE ==========")
 	fmt.Println("----- Bitcoin Transaction -----")
 	fmt.Println("Version:", tx.Version)
 	fmt.Println("SegWit:", tx.IsSegWit)
@@ -169,6 +170,8 @@ func PrettyPrint(tx *Transaction) {
 	fmt.Println("Outputs:", len(tx.Outputs))
 	fmt.Println("LockTime:", tx.LockTime)
 	fmt.Println()
+	fmt.Println("========== END TX =============")
+
 
 	for i, in := range tx.Inputs {
 		fmt.Println("Input", i)
