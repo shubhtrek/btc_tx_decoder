@@ -148,12 +148,8 @@ func Decode(raw []byte) (*Transaction, error) {
 	tx.LockTime = lockTime
 
 	// ---- Hashes ----
-	tx.TXID = CalculateTXID(raw)
-	if tx.IsSegWit {
-		tx.WTXID = CalculateWTXID(raw)
-	} else {
-		tx.WTXID = tx.TXID
-	}
+	tx.TXID = "TXID_NOT_IMPLEMENTED"
+	tx.WTXID = "WTXID_NOT_IMPLEMENTED"
 
 	return tx, nil
 
@@ -172,14 +168,13 @@ func PrettyPrint(tx *Transaction) {
 	fmt.Println()
 	fmt.Println("========== END TX =============")
 
-
 	for i, in := range tx.Inputs {
 		fmt.Println("Input", i)
 		fmt.Println("  PrevTxID:", FormatTXID(in.PrevTxID))
 		fmt.Println("  PrevIndex:", in.PrevIndex)
 		fmt.Println("  ScriptSig (hex):", fmt.Sprintf("%x", in.ScriptSig))
 		fmt.Println("  ScriptSig (len):", len(in.ScriptSig), "bytes")
-		fmt.Println("  ScriptSig Type:", DetectScriptType(in.ScriptSig))
+		
 
 		fmt.Println("  Sequence:", in.Sequence)
 		fmt.Println()
@@ -198,18 +193,7 @@ func PrettyPrint(tx *Transaction) {
 		fmt.Println("  Value (sats):", out.Value)
 		fmt.Println("  ScriptPubKey (hex):", fmt.Sprintf("%x", out.ScriptPubkey))
 		fmt.Println("  ScriptPubKey (len):", len(out.ScriptPubkey), "bytes")
-		fmt.Println("  ScriptPubKey Type:", DetectScriptType(out.ScriptPubkey))
-		hash := ExtractAddressHash(out.ScriptPubkey)
-		if hash != nil {
-			fmt.Println("  Address Hash:", fmt.Sprintf("%x", hash))
-
-			if DetectScriptType(out.ScriptPubkey) == "P2PKH" {
-				addr := P2PKHAddress(hash)
-				fmt.Println("  Bitcoin Address:", addr)
-			}
-		}
-
-		fmt.Println()
+		
 	}
 }
 
@@ -227,5 +211,4 @@ func PrintSummary(tx *Transaction) {
 
 	fmt.Println("Total Output (sats):", total)
 	fmt.Println("----------------")
-	fmt.Println()
 }
