@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/hex"
+	"flag"
 	"fmt"
 	"os"
 	"strings"
@@ -11,15 +12,23 @@ import (
 
 func main() {
 
-	fmt.Println("Bitcoin Transaction Decoder")
+	// ---- flags ----
+	summaryOnly := flag.Bool("summary", false, "Show transaction summary only")
+	jsonOut := flag.Bool("json", false, "Show transaction as JSON")
+	showInputs := flag.Bool("inputs", false, "Show inputs only")
+	showOutputs := flag.Bool("outputs", false, "Show outputs only")
 
-	if len(os.Args) < 2 {
+	flag.Parse()
+
+	if flag.NArg() < 1 {
 		fmt.Println("Usage:")
-		fmt.Println("  go run ./cmd/decoder <tx_hex_file>")
+		fmt.Println("  btc_tx_decoder <tx_hex_file> [--summary] [--json] [--inputs] [--outputs]")
 		return
 	}
 
-	filePath := os.Args[1]
+	filePath := flag.Arg(0)
+
+	fmt.Println("Bitcoin Transaction Decoder")
 
 	// read file
 	data, err := os.ReadFile(filePath)
@@ -43,6 +52,27 @@ func main() {
 	if err != nil {
 		fmt.Println("Decode failed ❌")
 		fmt.Println("Reason:", err)
+		return
+	}
+
+	// ---- output modes ----
+	if *jsonOut {
+		decoder.PrintJSON(tx)
+		return
+	}
+
+	if *summaryOnly {
+		decoder.PrintSummary(tx)
+		return
+	}
+
+	if *showInputs {
+		decoder.PrintInputs(tx)
+		return
+	}
+
+	if *showOutputs {
+		decoder.PrintOutputs(tx)
 		return
 	}
 
