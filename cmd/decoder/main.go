@@ -26,19 +26,37 @@ func main() {
 		return
 	}
 
-	filePath := flag.Arg(0)
+	input := flag.Arg(0)
 
 	fmt.Println("Bitcoin Transaction Decoder")
 
-	// read file
-	data, err := os.ReadFile(filePath)
-	if err != nil {
-		fmt.Println("File read error:", err)
-		return
-	}
+	var hexTx string
 
-	// clean hex
-	hexTx := strings.TrimSpace(string(data))
+	// ---- detect input type ----
+
+	// case 1: TXID (64 hex chars)
+	if len(input) == 64 {
+		fmt.Println("Network mode: fetching tx from mempool.space")
+
+		netHex, err := decoder.FetchTxHex(input)
+		if err != nil {
+			fmt.Println("Network fetch failed ❌")
+			fmt.Println("Reason:", err)
+			return
+		}
+
+		hexTx = strings.TrimSpace(netHex)
+
+		// case 2: file
+	} else {
+		data, err := os.ReadFile(input)
+		if err != nil {
+			fmt.Println("File read error:", err)
+			return
+		}
+
+		hexTx = strings.TrimSpace(string(data))
+	}
 
 	// hex -> bytes
 	raw, err := hex.DecodeString(hexTx)
